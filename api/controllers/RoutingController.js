@@ -7,12 +7,18 @@
 
 module.exports = {
 
+//db.routing.find({ app: 'stw', urls: { $elemMatch: { env: 'production' }}}, { urls: { $elemMatch: { env: 'production' }}} )
+
   /**
    * `RoutingController.getRoutingByAppNameAndEnv()`
    */
   getRoutingByAppAndEnv: function (req, res) {
-    Routing.findOne({ where: { app: req.param('app') } }, { urls: { $elemMatch: { env: req.param('env') } } }).exec(function(err, route) {
-      return res.json(route);
+
+    // Using native query on sails-mongo because, projection based on array are not supporter by the waterline select keyword! 
+    Routing.native(function(err, collection) {
+      collection.findOne({ app: req.param('app'), urls: { $elemMatch: { env: req.param('env') }}}, { urls: { $elemMatch: { env: req.param('env') }}}, function (err, route) {
+        return res.json(route);
+      });
     });
   },
 
