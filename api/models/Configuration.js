@@ -1,22 +1,24 @@
 /**
- * Routing.js
+ * Configuration.js
  *
- * @description :: Routing model.
+ * @description :: Configuration model.
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
 module.exports = {
 
     attributes: {
-        app: {
+        env: {
             type: 'string',
-            primaryKey: true,
             required: true
         },
-        urls: {
+        data: {
             type: 'array',
             required: true,
             defaultsTo: []
+        },
+        app: {
+            model: 'application'
         }
     }
 };

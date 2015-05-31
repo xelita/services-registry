@@ -19,6 +19,6 @@ module.exports = {
 
    models: {
    	connection: 'registryMongoDBServer',
-    migrate: 'safe'
+    migrate: 'alter'
    }
 };

@@ -23,7 +23,7 @@ module.exports.connections = {
 
   /***************************************************************************
   *                                                                          *
-  * NB: connections are defined in ~/.sailrc file
+  * NB: connections are defined in .sailrc file
   *                                                                          *
   ***************************************************************************/
   

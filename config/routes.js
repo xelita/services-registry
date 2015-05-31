@@ -48,7 +48,8 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  'GET /routes': 'RoutingController.getRoutings',
-  'GET /routes/:app': 'RoutingController.getRoutingsByApp',
-  'GET /routes/:app/:env': 'RoutingController.getRoutingByAppAndEnv'
+  'GET /configs': 'AppConfigController.getAppConfigs',
+  'GET /configs/:app': 'AppConfigController.getAppConfigsByApp',
+  'GET /configs/:app/:env': 'AppConfigController.getAppConfigByAppAndEnv',
+  'GET /configs/create': 'AppConfigController.create'
 };
