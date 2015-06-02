@@ -22,34 +22,67 @@
 
 module.exports.routes = {
 
-  /***************************************************************************
-  *                                                                          *
-  * Make the view located at `views/homepage.ejs` (or `views/homepage.jade`, *
-  * etc. depending on your default view engine) your home page.              *
-  *                                                                          *
-  * (Alternatively, remove this and add an `index.html` file in your         *
-  * `assets` directory)                                                      *
-  *                                                                          *
-  ***************************************************************************/
+    /***************************************************************************
+     *                                                                          *
+     * Make the view located at `views/homepage.ejs` (or `views/homepage.jade`, *
+     * etc. depending on your default view engine) your home page.              *
+     *                                                                          *
+     * (Alternatively, remove this and add an `index.html` file in your         *
+     * `assets` directory)                                                      *
+     *                                                                          *
+     ***************************************************************************/
 
-  /*
-  '/': {
-    view: 'homepage'
-  }
-  */
+    /*
+     '/': {
+     view: 'homepage'
+     }
+     */
 
-  /***************************************************************************
-  *                                                                          *
-  * Custom routes here...                                                    *
-  *                                                                          *
-  * If a request to a URL doesn't match any of the custom routes above, it   *
-  * is matched against Sails route blueprints. See `config/blueprints.js`    *
-  * for configuration options and examples.                                  *
-  *                                                                          *
-  ***************************************************************************/
+    /***************************************************************************
+     *                                                                          *
+     * Custom routes here...                                                    *
+     *                                                                          *
+     * If a request to a URL doesn't match any of the custom routes above, it   *
+     * is matched against Sails route blueprints. See `config/blueprints.js`    *
+     * for configuration options and examples.                                  *
+     *                                                                          *
+     ***************************************************************************/
 
-  'GET /configs': 'AppConfigController.getAppConfigs',
-  'GET /configs/:app': 'AppConfigController.getAppConfigsByApp',
-  'GET /configs/:app/:env': 'AppConfigController.getAppConfigByAppAndEnv',
-  'GET /configs/create': 'AppConfigController.create'
+    /*
+     'GET /configs': 'AppConfigController.getAppConfigs',
+     'GET /configs/:app': 'AppConfigController.getAppConfigsByApp',
+     'GET /configs/:app/:env': 'AppConfigController.getAppConfigByAppAndEnv',
+     'GET /configs/create': 'AppConfigController.create'
+     */
+
+    // APPS
+
+    'GET /applications': 'AppConfigController.getApplications',
+    'GET /applications/:app': 'AppConfigController.getApplication',
+    'POST /applications/:app': 'AppConfigController.addApplication',
+    'DELETE /applications/:app': 'AppConfigController.removeApplication',
+
+    // APPS / CONFIGS
+
+    /*
+     'GET /applications/configs/:appName': 'AppConfigController.getConfigs',
+     'POST /applications/configs/:appName': 'AppConfigController.addConfigs',
+     'DELETE /applications/configs/:appName': 'AppConfigController.removeConfigs',
+     */
+
+    // APPS / CONFIGS // ENVS
+
+    /*
+     'GET /applications/configs/:appName/:env': 'AppConfigController.getEnvConfigs',
+     'POST /applications/configs/:appName/:env': 'AppConfigController.addEnvConfigs',
+     'DELETE /applications/configs/:appName/:env': 'AppConfigController.removeEnvConfigs',
+     */
+
+    // APPS / CONFIGS // ENVS / CONFIG
+
+    /*
+     'GET /applications/:appName/configs/:env/config/:key': 'AppConfigController.getEnvConfig',
+     'POST /applications/:appName/configs/:env/config/:key': 'AppConfigController.addEnvConfig',
+     'DELETE /applications/:appName/configs/:env/config/:key': 'AppConfigController.removeEnvConfig'
+     */
 };
