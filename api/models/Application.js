@@ -14,8 +14,9 @@ module.exports = {
             required: true
         },
         configs: {
-            collection: 'configuration',
-            via: 'app'
+            type: 'array',
+            defaultsTo: [],
+            required: true
         }
     }
 };
