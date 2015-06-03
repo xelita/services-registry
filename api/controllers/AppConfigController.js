@@ -45,7 +45,7 @@ module.exports = {
      * `ApplicationController.addApplication()`
      */
     addApplication: function (req, res) {
-        // Get request data
+        // Get request payload
         var data = req.body;
 
         // Extract needed information
@@ -78,6 +78,71 @@ module.exports = {
             return res.json(null);
         });
     },
+
+    // APPS / CONFIGS
+
+    /**
+     * `ApplicationController.getConfigs()`
+     */
+    getConfigs: function (req, res) {
+        // Extract needed information
+        var app = req.param('app');
+
+        // Waterline call
+        Application.findOne({app: app}).exec(function (err, result) {
+            if (err) {
+                res.serverError(err);
+            }
+            if (!result) {
+                res.notFound('application ' + app + ' not found.');
+            }
+            return res.json(result.configs);
+        });
+    },
+
+    /**
+     * `ApplicationController.addConfigs()`
+     */
+    addConfigs: function (req, res) {
+        // Get request payload
+        var data = req.body;
+
+        // Extract needed information
+        var app = req.param('app');
+        var configs = data.configs;
+
+        // Waterline call
+        Application.update({app: app}, {configs: configs}).exec(function (err, results) {
+            if (err) {
+                res.serverError(err);
+            }
+            if (!results || results.length == 0) {
+                res.notFound('application ' + app + ' not found.');
+            }
+            return res.json(result.configs);
+        });
+    },
+
+    /**
+     * `ApplicationController.addConfigs()`
+     */
+    removeConfigs: function (req, res) {
+        // Extract needed information
+        var app = req.param('app');
+
+        // Waterline call
+        Application.update({app: app}, {configs: []}).exec(function (err, results) {
+            if (err) {
+                res.serverError(err);
+            }
+            if (!results || results.length == 0) {
+                res.notFound('application ' + app + ' not found.');
+            }
+            return res.json(result.configs);
+        });
+    },
+
+    //
 
     /**
      * `ApplicationController.getAppConfigByAppAndEnv()`
