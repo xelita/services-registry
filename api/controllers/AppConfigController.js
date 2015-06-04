@@ -138,82 +138,90 @@ module.exports = {
             if (!results || results.length == 0) {
                 res.notFound('application ' + app + ' not found.');
             }
-            return res.json(result.configs);
+            return res.json(null);
         });
     },
 
-    //
+    // APPS / CONFIGS / ENV
 
     /**
-     * `ApplicationController.getAppConfigByAppAndEnv()`
+     * `ApplicationController.getEnvConfigs()`
      */
-    getAppConfigByAppAndEnv: function (req, res) {
+    getEnvConfigs: function (req, res) {
+        // Extract needed information
+        var app = req.param('app');
+        var env = req.param('env');
 
+        // Waterline call
         // Using native query on sails-mongo because, projection based on array are not supporter by the waterline select keyword!
         Application.native(function (err, collection) {
             if (err) {
                 res.serverError(err);
             }
             collection.findOne({
-                app: req.param('app'),
-                urls: {$elemMatch: {env: req.param('env')}}
-            }, {urls: {$elemMatch: {env: req.param('env')}}}, function (err, configuration) {
+                app: app,
+                configs: {$elemMatch: {env: env}}
+            }, {configs: {$elemMatch: {env: env}}}, function (err, result) {
+                if (err) {
+                    res.serverError(err);
+                }
+                if (!result || !result.configs[0]) {
+                    res.notFound('no env [' + env + '] exists for app [' + env + '].');
+                }
+                return res.json(result.configs[0].data);
+            });
+        });
+    },
+
+    /**
+     * `ApplicationController.addEnvConfigs()`
+     */
+    addEnvConfigs: function (req, res) {
+        // Get request payload
+        var data = req.body;
+
+        // Extract needed information
+        var app = req.param('app');
+        var env = req.param('env');
+        var configs = data.data;
+
+        // Waterline call
+        Application.update({app: app, 'configs.env': env}, {'configs.$.data': configs}).exec(function (err, results) {
+            if (err) {
+                res.serverError(err);
+            }
+            if (!results || results.length == 0) {
+                res.notFound('no env [' + env + '] exists for app [' + env + '].');
+            }
+            return res.json(result.configs);
+        });
+    },
+
+    /**
+     * `ApplicationController.removeEnvConfigs()`
+     */
+    removeEnvConfigs: function (req, res) {
+        // Extract needed information
+        var app = req.param('app');
+        var env = req.param('env');
+
+        // Waterline call
+        // Using native query on sails-mongo because, projection based on array are not supporter by the waterline select keyword!
+        Application.native(function (err, collection) {
+            if (err) {
+                res.serverError(err);
+            }
+            collection.update({
+                app: app,
+                'configs.env': env
+            }, {$pull: {configs: {'configs.env': env}}}, function (err, configuration) {
                 if (err) {
                     res.serverError(err);
                 }
                 if (!configuration) {
                     res.notFound();
                 }
-                return res.json(configuration);
-            });
-        });
-    },
-
-    /**
-     * `ApplicationController.getAppConfigsByApp()`
-     */
-    getAppConfigsByApp: function (req, res) {
-        Application.findOne({where: {app: req.param('app')}}).exec(function (err, configuration) {
-            if (err) {
-                res.serverError(err);
-            }
-            if (!configuration) {
-                res.notFound();
-            }
-            return res.json(configuration);
-        });
-    },
-
-    /**
-     * `ApplicationController.getAppConfigs()`
-     */
-    getAppConfigs: function (req, res) {
-        Application.find().populate('configs').exec(function (err, configurations) {
-            if (err) {
-                res.serverError(err);
-            }
-            if (!configurations || configurations.length == 0) {
-                res.notFound();
-            }
-            return res.json(configurations);
-        });
-    },
-
-    create: function (req, res) {
-        Application.findOrCreate({app: 'stw'}).exec(function (err, app) {
-            if (err) {
-                res.serverError(err);
-            }
-            sails.log(app);
-            configuration.findOrCreate({application: app.id, env: 'development'}, {
-                application: app.id,
-                env: 'development',
-                data: [{backendBaseUrl: 'http://localhost:1337'}]
-            }).exec(function (err, app) {
-                if (err) {
-                    res.serverError(err);
-                }
-                return res.json(app);
+                return res.json(null);
             });
         });
     }
