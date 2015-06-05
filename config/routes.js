@@ -60,18 +60,19 @@ module.exports.routes = {
     'GET /applications': 'AppConfigController.getApplications',
     'GET /applications/:app': 'AppConfigController.getApplication',
     'POST /applications': 'AppConfigController.addApplication',
+    'PUT /applications': 'AppConfigController.updateApplication',
     'DELETE /applications/:app': 'AppConfigController.removeApplication',
 
     // APPS / CONFIGS
 
     'GET /applications/:app/configs': 'AppConfigController.getConfigs',
-    'POST /applications/:app/configs': 'AppConfigController.addConfigs',
+    'POST /applications/:app/configs': 'AppConfigController.setConfigs',
     'DELETE /applications/:app/configs': 'AppConfigController.removeConfigs',
 
     // APPS / CONFIGS // ENVS
 
     'GET /applications/:app/configs/:env': 'AppConfigController.getEnvConfigs',
-    'POST /applications/:app/configs/:env': 'AppConfigController.addEnvConfigs',
+    'POST /applications/:app/configs/:env': 'AppConfigController.setEnvConfigs',
     'DELETE /applications/:app/configs/:env': 'AppConfigController.removeEnvConfigs',
 
     // APPS / CONFIGS // ENVS / CONFIG

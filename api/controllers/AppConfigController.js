@@ -62,6 +62,29 @@ module.exports = {
     },
 
     /**
+     * `ApplicationController.updateApplication()`
+     */
+    updateApplication: function (req, res) {
+        // Get request payload
+        var data = req.body;
+
+        // Extract needed information
+        var app = data.app;
+        var configs = data.configs || [];
+
+        // Waterline call
+        Application.update({app: app}, {app: app, configs: configs}).exec(function (err, results) {
+            if (err) {
+                res.serverError(err);
+            }
+            if (!results || results.length == 0) {
+                res.notFound('application [' + app + '] not found.');
+            }
+            return res.json(results[0]);
+        });
+    },
+
+    /**
      * `ApplicationController.getApplication()`
      */
     removeApplication: function (req, res) {
@@ -108,9 +131,9 @@ module.exports = {
     },
 
     /**
-     * `ApplicationController.addConfigs()`
+     * `ApplicationController.setConfigs()`
      */
-    addConfigs: function (req, res) {
+    setConfigs: function (req, res) {
         // Get request payload
         var data = req.body;
 
@@ -181,9 +204,9 @@ module.exports = {
     },
 
     /**
-     * `ApplicationController.addEnvConfigs()`
+     * `ApplicationController.setEnvConfigs()`
      */
-    addEnvConfigs: function (req, res) {
+    setEnvConfigs: function (req, res) {
         // Get request payload
         var data = req.body;
 

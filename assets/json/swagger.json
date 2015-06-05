@@ -53,6 +53,33 @@
         ],
         "responses": {
           "200": {
+            "description": "Payload for application creation",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing application",
+        "description": "Update an existing application",
+        "operationId":"updateApplication",
+        "tags": [
+          "applications"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Payload for application update",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
             "description": "The application that has been just added",
             "schema": {
               "type": "object"
