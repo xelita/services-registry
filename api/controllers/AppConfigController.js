@@ -35,7 +35,7 @@ module.exports = {
                 res.serverError(err);
             }
             if (!result) {
-                res.notFound('application ' + app + ' not found.');
+                res.notFound('application [' + app + '] not found.');
             }
             return res.json(result);
         });
@@ -50,16 +50,14 @@ module.exports = {
 
         // Extract needed information
         var app = data.app;
+        var configs = data.configs || [];
 
         // Waterline call
-        Application.findOrCreate({app: app}, {app: app}).exec(function (err, results) {
+        Application.create({app: app, configs: configs}).exec(function (err, result) {
             if (err) {
                 res.serverError(err);
             }
-            if (!results || results.length == 0) {
-                res.notFound('application ' + app + ' could not be created found.');
-            }
-            return res.json(results[0]);
+            return res.json(result);
         });
     },
 
@@ -71,11 +69,20 @@ module.exports = {
         var app = req.param('app');
 
         // Waterline call
-        Application.destroy({app: app}).exec(function (err) {
+        Application.findOne({app: app}).exec(function (err, result) {
             if (err) {
                 res.serverError(err);
             }
-            return res.json(null);
+            if (!result) {
+                res.notFound('application [' + app + '] not found.');
+            }
+
+            Application.destroy({app: app}).exec(function (err) {
+                if (err) {
+                    res.serverError(err);
+                }
+                return res.json();
+            });
         });
     },
 
