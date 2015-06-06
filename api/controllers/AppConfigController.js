@@ -142,19 +142,19 @@ module.exports = {
         var configs = data.configs;
 
         // Waterline call
-        Application.update({app: app}, {configs: configs}).exec(function (err, results) {
+            Application.update({app: app}, {configs: configs}).exec(function (err, results) {
             if (err) {
                 res.serverError(err);
             }
             if (!results || results.length == 0) {
                 res.notFound('application ' + app + ' not found.');
             }
-            return res.json(result.configs);
+            return res.json(results[0].configs);
         });
     },
 
     /**
-     * `ApplicationController.addConfigs()`
+     * `ApplicationController.removeConfigs()`
      */
     removeConfigs: function (req, res) {
         // Extract needed information

@@ -10,6 +10,10 @@
     {
       "name": "applications",
       "description": "Manage applications"
+    },
+    {
+      "name": "configs",
+      "description": "Manage applications configurations"
     }
   ],
   "paths": {
@@ -17,7 +21,7 @@
       "get": {
         "summary": "Get all registered applications with their configurations",
         "description": "Get all registered applications with their configurations",
-        "operationId":"getApplications",
+        "operationId": "getApplications",
         "tags": [
           "applications"
         ],
@@ -36,7 +40,7 @@
       "post": {
         "summary": "Add an application with its optional configurations",
         "description": "Add an application with its optional configurations",
-        "operationId":"addApplication",
+        "operationId": "addApplication",
         "tags": [
           "applications"
         ],
@@ -63,7 +67,7 @@
       "put": {
         "summary": "Update an existing application",
         "description": "Update an existing application",
-        "operationId":"updateApplication",
+        "operationId": "updateApplication",
         "tags": [
           "applications"
         ],
@@ -84,6 +88,9 @@
             "schema": {
               "type": "object"
             }
+          },
+          "404": {
+            "description": "The application could not be found"
           }
         }
       }
@@ -92,7 +99,7 @@
       "get": {
         "summary": "Get all configurations for a given application identified by its name",
         "description": "Get all configurations for a given application identified by its name",
-        "operationId":"getApplication",
+        "operationId": "getApplication",
         "tags": [
           "applications"
         ],
@@ -120,7 +127,7 @@
       "delete": {
         "summary": "Delete an existing application identified by its name",
         "description": "Delete an existing application identified by its name",
-        "operationId":"removeApplication",
+        "operationId": "removeApplication",
         "tags": [
           "applications"
         ],
@@ -139,6 +146,98 @@
         "responses": {
           "200": {
             "description": "The application has been successfully deleted"
+          },
+          "404": {
+            "description": "The application could not be found"
+          }
+        }
+      }
+    },
+    "/applications/{app}/configs": {
+      "get": {
+        "summary": "Get all configurations for a given application identified by its name",
+        "description": "Get all configurations for a given application identified by its name",
+        "operationId": "getConfigs",
+        "tags": [
+          "configs"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "app",
+            "in": "path",
+            "description": "Name of the application to return",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The application with its configurations is found"
+          },
+          "404": {
+            "description": "The application could not be found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update application configurations",
+        "description": "Update application configurations",
+        "operationId": "setConfigs",
+        "tags": [
+          "configs"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "app",
+            "in": "path",
+            "description": "Name of the concerned application",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Payload for configurations update",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The application configurations have been successfully updated"
+          },
+          "404": {
+            "description": "The application could not be found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete all application configurations",
+        "description": "Delete all application configurations",
+        "operationId": "removeConfigs",
+        "tags": [
+          "configs"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "app",
+            "in": "path",
+            "description": "Name of the concerned application",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The application configurations have been successfully deleted"
           },
           "404": {
             "description": "The application could not be found"
