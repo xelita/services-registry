@@ -6,6 +6,8 @@
  */
 
 module.exports = {
+    autoCreatedAt: false,
+    autoUpdatedAt: false,
 
     attributes: {
         app: {
@@ -15,8 +17,7 @@ module.exports = {
         },
         configs: {
             type: 'array',
-            defaultsTo: [],
-            required: true
+            defaultsTo: []
         }
     }
 };

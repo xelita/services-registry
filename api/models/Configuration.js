@@ -6,7 +6,9 @@
  */
 
 module.exports = {
-
+    autoCreatedAt: false,
+    autoUpdatedAt: false,
+    
     attributes: {
         env: {
             type: 'string',
