@@ -208,14 +208,17 @@ module.exports = {
         var configs = data.data;
 
         // Waterline call
-        Application.update({app: app, 'configs.env': env}, {'configs.$.data': configs}).exec(function (err, results) {
+        Application.update({
+            app: app,
+            'configs.env': env
+        }, {'configs.$.data': configs}).exec(function (err, results) {
             if (err) {
                 return res.serverError(err);
             }
             if (!results || results.length == 0) {
-                return res.notFound('no env [' + env + '] exists for app [' + env + '].');
+                return res.notFound('no env [' + env + '] exists for app [' + app + '].');
             }
-            return res.json(result.configs);
+            return res.json(results[0].configs[0].data);
         });
     },
 
