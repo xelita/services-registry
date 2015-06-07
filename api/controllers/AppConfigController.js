@@ -169,7 +169,7 @@ module.exports = {
             if (!results || results.length == 0) {
                 return res.notFound('application ' + app + ' not found.');
             }
-            return res.json(null);
+            return res.json();
         });
     },
 
@@ -231,9 +231,12 @@ module.exports = {
         var env = req.param('env');
 
         // Waterline call
-        Application.destroy({app: app, 'configs.env': env}).exec(function (err) {
+        Application.update({app: app, 'configs.env': env}, {'configs.$.data': []}).exec(function (err, results) {
             if (err) {
                 return res.serverError(err);
+            }
+            if (!results || results.length == 0) {
+                return res.notFound('no env [' + env + '] exists for app [' + app + '].');
             }
             return res.json();
         });

@@ -325,6 +325,41 @@
             "description": "The application could not be found or the environment does not exist"
           }
         }
+      },
+      "delete": {
+        "summary": "Delete all environment configurations for a given application",
+        "description": "Delete all environment configurations for a given application",
+        "operationId": "removeEnvConfigs",
+        "tags": [
+          "envs"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "app",
+            "in": "path",
+            "description": "Name of the application",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "env",
+            "in": "path",
+            "description": "Name of the environment",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The application configurations have been successfully deleted for the environment"
+          },
+          "404": {
+            "description": "The application could not be found or the environment does not exist"
+          }
+        }
       }
     }
   }
