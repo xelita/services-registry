@@ -189,7 +189,7 @@ module.exports = {
                 return res.serverError(err);
             }
             if (!result || !result.configs[0]) {
-                return res.notFound('no env [' + env + '] exists for app [' + env + '].');
+                return res.notFound('no env [' + env + '] exists for app [' + app + '].');
             }
             return res.json(result.configs[0].data);
         });

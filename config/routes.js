@@ -72,7 +72,7 @@ module.exports.routes = {
     // APPS / CONFIGS // ENVS
 
     'GET /applications/:app/configs/:env': 'AppConfigController.getEnvConfigs',
-    'POST /applications/:app/configs/:env': 'AppConfigController.setEnvConfigs',
+    'PUT /applications/:app/configs/:env': 'AppConfigController.setEnvConfigs',
     'DELETE /applications/:app/configs/:env': 'AppConfigController.removeEnvConfigs',
 
     // APPS / CONFIGS // ENVS / CONFIG
