@@ -60,7 +60,7 @@ module.exports.routes = {
     'GET /applications': 'AppConfigController.getApplications',
     'GET /applications/:app': 'AppConfigController.getApplication',
     'POST /applications': 'AppConfigController.addApplication',
-    'PUT /applications': 'AppConfigController.updateApplication',
+    'PUT /applications/:app': 'AppConfigController.updateApplication',
     'DELETE /applications/:app': 'AppConfigController.removeApplication',
 
     // APPS / CONFIGS
