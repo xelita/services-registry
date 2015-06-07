@@ -14,6 +14,10 @@
     {
       "name": "configs",
       "description": "Manage applications configurations"
+    },
+    {
+      "name": "envs",
+      "description": "Manage applications configurations for a specific environments"
     }
   ],
   "paths": {
@@ -63,36 +67,6 @@
             }
           }
         }
-      },
-      "put": {
-        "summary": "Update an existing application",
-        "description": "Update an existing application",
-        "operationId": "updateApplication",
-        "tags": [
-          "applications"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Payload for application update",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The application that has been just added",
-            "schema": {
-              "type": "object"
-            }
-          },
-          "404": {
-            "description": "The application could not be found"
-          }
-        }
       }
     },
     "/applications/{app}": {
@@ -118,6 +92,36 @@
         "responses": {
           "200": {
             "description": "The application with its configurations is found"
+          },
+          "404": {
+            "description": "The application could not be found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing application",
+        "description": "Update an existing application",
+        "operationId": "updateApplication",
+        "tags": [
+          "applications"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Payload for application update",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The application that has been just added",
+            "schema": {
+              "type": "object"
+            }
           },
           "404": {
             "description": "The application could not be found"
@@ -241,6 +245,119 @@
           },
           "404": {
             "description": "The application could not be found"
+          }
+        }
+      }
+    },
+    "/applications/{app}/configs/{env}": {
+      "get": {
+        "summary": "Get all configurations for a given application for a specific environment",
+        "description": "Get all configurations for a given application for a specific environment",
+        "operationId": "getEnvConfigs",
+        "tags": [
+          "envs"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "app",
+            "in": "path",
+            "description": "Name of the application",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "env",
+            "in": "path",
+            "description": "Name of the environment",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The environment is found for the given application"
+          },
+          "404": {
+            "description": "The application could not be found or the environment does not exist"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update environment configurations for a given application",
+        "description": "Update environment configurations for a given application",
+        "operationId": "setEnvConfigs",
+        "tags": [
+          "envs"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "app",
+            "in": "path",
+            "description": "Name of the application",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "env",
+            "in": "path",
+            "description": "Name of the environment",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Payload for environment configurations update",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The application configurations have been successfully updated for the environment"
+          },
+          "404": {
+            "description": "The application could not be found or the environment does not exist"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete all environment configurations for a given application",
+        "description": "Delete all environment configurations for a given application",
+        "operationId": "removeEnvConfigs",
+        "tags": [
+          "envs"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "app",
+            "in": "path",
+            "description": "Name of the application",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "env",
+            "in": "path",
+            "description": "Name of the environment",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The application configurations have been successfully deleted for the environment"
+          },
+          "404": {
+            "description": "The application could not be found or the environment does not exist"
           }
         }
       }

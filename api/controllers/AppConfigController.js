@@ -16,7 +16,7 @@ module.exports = {
         // Waterline call
         Application.find().exec(function (err, results) {
             if (err) {
-                res.serverError(err);
+                return res.serverError(err);
             }
             return res.json(results);
         });
@@ -32,10 +32,10 @@ module.exports = {
         // Waterline call
         Application.findOne({app: app}).exec(function (err, result) {
             if (err) {
-                res.serverError(err);
+                return res.serverError(err);
             }
             if (!result) {
-                res.notFound('application [' + app + '] not found.');
+                return res.notFound('application [' + app + '] not found.');
             }
             return res.json(result);
         });
@@ -55,7 +55,7 @@ module.exports = {
         // Waterline call
         Application.create({app: app, configs: configs}).exec(function (err, result) {
             if (err) {
-                res.serverError(err);
+                return res.serverError(err);
             }
             return res.json(result);
         });
@@ -69,16 +69,17 @@ module.exports = {
         var data = req.body;
 
         // Extract needed information
-        var app = data.app;
-        var configs = data.configs || [];
+        var app = req.param('app');
+        var newApp = data.app || app;
+        var newConfigs = data.configs || [];
 
         // Waterline call
-        Application.update({app: app}, {app: app, configs: configs}).exec(function (err, results) {
+        Application.update({app: app}, {app: newApp, configs: newConfigs}).exec(function (err, results) {
             if (err) {
-                res.serverError(err);
+                return res.serverError(err);
             }
             if (!results || results.length == 0) {
-                res.notFound('application [' + app + '] not found.');
+                return res.notFound('application [' + app + '] not found.');
             }
             return res.json(results[0]);
         });
@@ -94,10 +95,10 @@ module.exports = {
         // Waterline call
         Application.findOne({app: app}).exec(function (err, result) {
             if (err) {
-                res.serverError(err);
+                return res.serverError(err);
             }
             if (!result) {
-                res.notFound('application [' + app + '] not found.');
+                return res.notFound('application [' + app + '] not found.');
             }
 
             Application.destroy({app: app}).exec(function (err) {
@@ -121,10 +122,10 @@ module.exports = {
         // Waterline call
         Application.findOne({app: app}).exec(function (err, result) {
             if (err) {
-                res.serverError(err);
+                return res.serverError(err);
             }
             if (!result) {
-                res.notFound('application ' + app + ' not found.');
+                return res.notFound('application ' + app + ' not found.');
             }
             return res.json(result.configs);
         });
@@ -142,12 +143,12 @@ module.exports = {
         var configs = data.configs;
 
         // Waterline call
-            Application.update({app: app}, {configs: configs}).exec(function (err, results) {
+        Application.update({app: app}, {configs: configs}).exec(function (err, results) {
             if (err) {
-                res.serverError(err);
+                return res.serverError(err);
             }
             if (!results || results.length == 0) {
-                res.notFound('application ' + app + ' not found.');
+                return res.notFound('application ' + app + ' not found.');
             }
             return res.json(results[0].configs);
         });
@@ -163,12 +164,12 @@ module.exports = {
         // Waterline call
         Application.update({app: app}, {configs: []}).exec(function (err, results) {
             if (err) {
-                res.serverError(err);
+                return res.serverError(err);
             }
             if (!results || results.length == 0) {
-                res.notFound('application ' + app + ' not found.');
+                return res.notFound('application ' + app + ' not found.');
             }
-            return res.json(null);
+            return res.json();
         });
     },
 
@@ -183,23 +184,14 @@ module.exports = {
         var env = req.param('env');
 
         // Waterline call
-        // Using native query on sails-mongo because, projection based on array are not supporter by the waterline select keyword!
-        Application.native(function (err, collection) {
+        Application.findOne({app: app, 'configs.env': env}).exec(function (err, result) {
             if (err) {
-                res.serverError(err);
+                return res.serverError(err);
             }
-            collection.findOne({
-                app: app,
-                configs: {$elemMatch: {env: env}}
-            }, {configs: {$elemMatch: {env: env}}}, function (err, result) {
-                if (err) {
-                    res.serverError(err);
-                }
-                if (!result || !result.configs[0]) {
-                    res.notFound('no env [' + env + '] exists for app [' + env + '].');
-                }
-                return res.json(result.configs[0].data);
-            });
+            if (!result || !result.configs[0]) {
+                return res.notFound('no env [' + env + '] exists for app [' + app + '].');
+            }
+            return res.json(result.configs[0].data);
         });
     },
 
@@ -216,14 +208,17 @@ module.exports = {
         var configs = data.data;
 
         // Waterline call
-        Application.update({app: app, 'configs.env': env}, {'configs.$.data': configs}).exec(function (err, results) {
+        Application.update({
+            app: app,
+            'configs.env': env
+        }, {'configs.$.data': configs}).exec(function (err, results) {
             if (err) {
-                res.serverError(err);
+                return res.serverError(err);
             }
             if (!results || results.length == 0) {
-                res.notFound('no env [' + env + '] exists for app [' + env + '].');
+                return res.notFound('no env [' + env + '] exists for app [' + app + '].');
             }
-            return res.json(result.configs);
+            return res.json(results[0].configs[0].data);
         });
     },
 
@@ -236,23 +231,14 @@ module.exports = {
         var env = req.param('env');
 
         // Waterline call
-        // Using native query on sails-mongo because, projection based on array are not supporter by the waterline select keyword!
-        Application.native(function (err, collection) {
+        Application.update({app: app, 'configs.env': env}, {'configs.$.data': []}).exec(function (err, results) {
             if (err) {
-                res.serverError(err);
+                return res.serverError(err);
             }
-            collection.update({
-                app: app,
-                'configs.env': env
-            }, {$pull: {configs: {'configs.env': env}}}, function (err, configuration) {
-                if (err) {
-                    res.serverError(err);
-                }
-                if (!configuration) {
-                    res.notFound();
-                }
-                return res.json(null);
-            });
+            if (!results || results.length == 0) {
+                return res.notFound('no env [' + env + '] exists for app [' + app + '].');
+            }
+            return res.json();
         });
     }
 };
